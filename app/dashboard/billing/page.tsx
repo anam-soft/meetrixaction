@@ -471,7 +471,7 @@ export default function BillingPage() {
                 issues you may have.
               </p>
               <a
-                href="mailto:support@aimeetingtracker.com"
+                href="mailto:support@meetrixaction.com"
                 className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 font-medium"
               >
                 Contact Support

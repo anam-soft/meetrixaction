@@ -414,7 +414,7 @@ export default function SettingsPage() {
               {new Date().toLocaleDateString()}
             </p>
             <p className="pt-2">
-              AI Meeting Action Tracker - Transform your meetings into actionable
+              MeetRix Action - Transform your meetings into actionable
               insights with AI-powered transcription and task extraction.
             </p>
           </div>

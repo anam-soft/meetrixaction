@@ -8,19 +8,19 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: "AI Meeting Action Tracker | Turn Meetings Into Completed Work",
+  title: "MeetRix Action | Turn Meetings Into Completed Work",
   description: "Extract action items, assign tasks, and never lose track again. AI-powered meeting management that actually works. Start free with 5 meetings per month.",
   keywords: ["meeting management", "AI meeting assistant", "action items", "task tracking", "meeting notes", "productivity tool"],
-  authors: [{ name: "AI Meeting Action Tracker" }],
+  authors: [{ name: "MeetRix Action" }],
   openGraph: {
-    title: "AI Meeting Action Tracker | Turn Meetings Into Completed Work",
+    title: "MeetRix Action | Turn Meetings Into Completed Work",
     description: "Extract action items, assign tasks, and never lose track again. AI-powered meeting management that actually works.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Meeting Action Tracker | Turn Meetings Into Completed Work",
+    title: "MeetRix Action | Turn Meetings Into Completed Work",
     description: "Extract action items, assign tasks, and never lose track again. AI-powered meeting management that actually works.",
   },
   robots: {

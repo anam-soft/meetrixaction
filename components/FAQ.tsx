@@ -114,7 +114,7 @@ export default function FAQ() {
           </h2>
 
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to know about our AI Meeting Action Tracker
+            Everything you need to know about MeetRix Action
           </p>
         </motion.div>
 
