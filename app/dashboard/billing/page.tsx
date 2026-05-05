@@ -11,8 +11,6 @@ import {
   AlertCircle,
   ExternalLink,
   Loader2,
-  RefreshCw,
-  Bug,
 } from "lucide-react"
 
 interface Usage {
@@ -40,9 +38,6 @@ export default function BillingPage() {
   const [loading, setLoading] = useState(true)
   const [upgrading, setUpgrading] = useState(false)
   const [managingBilling, setManagingBilling] = useState(false)
-  const [syncing, setSyncing] = useState(false)
-  const [showDebug, setShowDebug] = useState(false)
-  const [debugInfo, setDebugInfo] = useState<any>(null)
 
   useEffect(() => {
     fetchData()
@@ -121,49 +116,6 @@ export default function BillingPage() {
     }
   }
 
-  const handleSyncSubscription = async (subscriptionId?: string, customerId?: string) => {
-    setSyncing(true)
-    try {
-      const res = await fetch("/api/subscription/sync", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subscriptionId, customerId }),
-      })
-      const data = await res.json()
-      
-      if (data.success) {
-        alert("✅ Subscription synced successfully! Refreshing page...")
-        window.location.reload()
-      } else {
-        if (data.showManualSync) {
-          // Show debug info to help user find subscription ID
-          handleDebugSubscription()
-        }
-        alert("⚠️ " + (data.message || "No active subscription found in Stripe"))
-      }
-    } catch (error) {
-      alert("❌ Failed to sync subscription")
-    } finally {
-      setSyncing(false)
-    }
-  }
-
-  const handleDebugSubscription = async () => {
-    try {
-      const res = await fetch("/api/debug/subscription")
-      const data = await res.json()
-      setDebugInfo(data)
-      setShowDebug(true)
-    } catch (error) {
-      alert("Failed to fetch debug info")
-    }
-  }
-
-  const handleManualSync = (subId: string, custId: string) => {
-    setShowDebug(false)
-    handleSyncSubscription(subId, custId)
-  }
-
   const plans = [
     {
       name: "Free",
@@ -230,101 +182,6 @@ export default function BillingPage() {
             Manage your subscription and monitor usage
           </p>
         </div>
-
-        {/* Debug & Sync Tools */}
-        {!usage?.isPro && (
-          <div className="glass-card p-4 bg-yellow-500/10 border-yellow-500/30">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <h3 className="font-semibold text-yellow-400 mb-2">
-                  Already upgraded but still showing Free Plan?
-                </h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  If you've completed payment but your plan hasn't updated, try syncing your subscription from Stripe.
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleSyncSubscription()}
-                    disabled={syncing}
-                    className="px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/50 rounded-lg font-semibold transition-colors flex items-center gap-2 text-sm"
-                  >
-                    {syncing ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Syncing...
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="w-4 h-4" />
-                        Sync Subscription
-                      </>
-                    )}
-                  </button>
-                  <button
-                    onClick={handleDebugSubscription}
-                    className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg font-semibold transition-colors flex items-center gap-2 text-sm"
-                  >
-                    <Bug className="w-4 h-4" />
-                    Debug Info
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Debug Info Modal */}
-        {showDebug && debugInfo && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-            <div className="glass-card p-6 max-w-3xl w-full max-h-[80vh] overflow-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold">Debug Information</h2>
-                <button
-                  onClick={() => setShowDebug(false)}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg"
-                >
-                  Close
-                </button>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="p-4 bg-white/5 rounded-lg">
-                  <h3 className="font-semibold mb-2 text-purple-400">Diagnosis</h3>
-                  <p className="text-sm">{debugInfo.diagnosis?.issue}</p>
-                </div>
-
-                <div className="p-4 bg-white/5 rounded-lg">
-                  <h3 className="font-semibold mb-2 text-blue-400">User Info</h3>
-                  <pre className="text-xs overflow-auto">
-                    {JSON.stringify(debugInfo.user, null, 2)}
-                  </pre>
-                </div>
-
-                <div className="p-4 bg-white/5 rounded-lg">
-                  <h3 className="font-semibold mb-2 text-green-400">Local Subscription</h3>
-                  <pre className="text-xs overflow-auto">
-                    {JSON.stringify(debugInfo.localSubscription, null, 2)}
-                  </pre>
-                </div>
-
-                <div className="p-4 bg-white/5 rounded-lg">
-                  <h3 className="font-semibold mb-2 text-yellow-400">Stripe Customer</h3>
-                  <pre className="text-xs overflow-auto">
-                    {JSON.stringify(debugInfo.stripeCustomer, null, 2)}
-                  </pre>
-                </div>
-
-                <div className="p-4 bg-white/5 rounded-lg">
-                  <h3 className="font-semibold mb-2 text-pink-400">Stripe Subscriptions</h3>
-                  <pre className="text-xs overflow-auto">
-                    {JSON.stringify(debugInfo.stripeSubscriptions, null, 2)}
-                  </pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Current Plan */}
         <div className="glass-card p-6">
