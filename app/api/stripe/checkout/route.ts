@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
         email: user.email!,
         metadata: {
           userId: user.id,
+          clerkId: user.clerk_id || '',
         },
       })
       customerId = customer.id
