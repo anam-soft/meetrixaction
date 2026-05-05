@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
+import { useUser } from "@clerk/nextjs"
 import DashboardLayout from "@/components/DashboardLayout"
 import {
   User,
@@ -23,11 +23,12 @@ interface NotificationSettings {
 }
 
 export default function SettingsPage() {
-  const { data: session } = useSession()
+  const { user } = useUser()
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState("")
+  const [currentDate, setCurrentDate] = useState("")
   const [saveMessage, setSaveMessage] = useState<{
     type: "success" | "error"
     text: string
@@ -46,6 +47,9 @@ export default function SettingsPage() {
     if (savedSettings) {
       setNotifications(JSON.parse(savedSettings))
     }
+    
+    // Set current date on client side to avoid hydration mismatch
+    setCurrentDate(new Date().toLocaleDateString())
   }, [])
 
   const handleSaveNotifications = async () => {
@@ -124,7 +128,7 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium mb-2">Name</label>
                 <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
                   <p className="text-sm">
-                    {session?.user?.name || "Not set"}
+                    {user?.fullName || user?.firstName || "Not set"}
                   </p>
                 </div>
               </div>
@@ -133,7 +137,7 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium mb-2">Email</label>
                 <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
                   <p className="text-sm">
-                    {session?.user?.email || "Not set"}
+                    {user?.primaryEmailAddress?.emailAddress || "Not set"}
                   </p>
                 </div>
               </div>
@@ -411,7 +415,7 @@ export default function SettingsPage() {
             </p>
             <p>
               <span className="font-medium text-foreground">Last Updated:</span>{" "}
-              {new Date().toLocaleDateString()}
+              {currentDate || "Loading..."}
             </p>
             <p className="pt-2">
               MeetRix Action - Transform your meetings into actionable
