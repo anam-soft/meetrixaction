@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getCurrentUser } from "@/lib/clerk-utils"
+import { getCurrentUser } from "@/lib/auth-utils"
 import { checkUsageLimit } from "@/lib/usage"
 
 export const dynamic = 'force-dynamic'

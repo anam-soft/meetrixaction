@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useUser } from "@clerk/nextjs"
+import { useSession } from "next-auth/react"
 import DashboardLayout from "@/components/DashboardLayout"
 import {
   User,
@@ -23,7 +23,7 @@ interface NotificationSettings {
 }
 
 export default function SettingsPage() {
-  const { user } = useUser()
+  const { data: session } = useSession()
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -124,7 +124,7 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium mb-2">Name</label>
                 <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
                   <p className="text-sm">
-                    {user?.fullName || user?.firstName || "Not set"}
+                    {session?.user?.name || "Not set"}
                   </p>
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium mb-2">Email</label>
                 <div className="px-4 py-3 bg-white/5 border border-white/10 rounded-lg">
                   <p className="text-sm">
-                    {user?.primaryEmailAddress?.emailAddress || "Not set"}
+                    {session?.user?.email || "Not set"}
                   </p>
                 </div>
               </div>
@@ -144,12 +144,11 @@ export default function SettingsPage() {
                 <Shield className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-blue-400">
-                    Managed by Clerk
+                    Secure Authentication
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Your profile information is securely managed by Clerk. To
-                    update your name, email, or password, use the user menu in
-                    the top right corner.
+                    Your profile information is securely stored. To update your
+                    password or account details, please contact support.
                   </p>
                 </div>
               </div>

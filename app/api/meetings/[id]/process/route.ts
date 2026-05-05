@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getCurrentUser } from "@/lib/clerk-utils"
+import { getCurrentUser } from "@/lib/auth-utils"
 import { analyzeMeetingTranscript, transcribeAudio } from "@/lib/openai"
 import { incrementAIProcessed } from "@/lib/usage"
 import { prisma } from "@/lib/prisma"

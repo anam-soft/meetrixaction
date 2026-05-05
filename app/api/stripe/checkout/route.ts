@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getCurrentUser } from "@/lib/clerk-utils"
+import { getCurrentUser } from "@/lib/auth-utils"
 import { prisma } from "@/lib/prisma"
 import Stripe from "stripe"
 
@@ -36,7 +36,6 @@ export async function POST(request: NextRequest) {
         email: user.email!,
         metadata: {
           userId: user.id,
-          clerkId: user.clerk_id!,
         },
       })
       customerId = customer.id
