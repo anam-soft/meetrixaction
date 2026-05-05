@@ -116,7 +116,7 @@ export default function Footer() {
           className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <p className="text-sm text-muted-foreground">
-            © 2026 MeetRix Action. All rights reserved.
+            © 2025 MeetRix Action. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">
