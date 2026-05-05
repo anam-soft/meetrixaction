@@ -8,12 +8,17 @@ import { prisma } from "./prisma"
  */
 export async function getCurrentUser() {
   try {
+    console.log("🔍 getCurrentUser: Starting...")
     const session = await getServerSession(authOptions)
+    console.log("🔍 getCurrentUser: Session:", session ? "Found" : "Not found")
     
     if (!session?.user?.email) {
+      console.log("🔍 getCurrentUser: No session or email")
       return null
     }
 
+    console.log("🔍 getCurrentUser: Looking up user by email:", session.user.email)
+    
     // Find user by email from session
     const user = await prisma.users.findUnique({
       where: { email: session.user.email },
@@ -22,9 +27,10 @@ export async function getCurrentUser() {
       },
     })
 
+    console.log("🔍 getCurrentUser: User found:", user ? "Yes" : "No")
     return user
   } catch (error) {
-    console.error("Error getting current user:", error)
+    console.error("❌ Error getting current user:", error)
     return null
   }
 }
