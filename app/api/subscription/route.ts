@@ -3,6 +3,8 @@ import { getCurrentUser } from "@/lib/clerk-utils"
 import { prisma } from "@/lib/prisma"
 import { syncSubscriptionFromStripe } from "@/lib/stripe-utils"
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser()

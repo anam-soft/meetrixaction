@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs"
 import { NextResponse } from "next/server"
 import { randomUUID } from "crypto"
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(req: Request) {
   try {
     const { email, password, name } = await req.json()

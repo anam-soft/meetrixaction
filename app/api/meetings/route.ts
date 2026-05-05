@@ -4,6 +4,8 @@ import { checkUsageLimit, incrementUsage } from "@/lib/usage"
 import { uploadToS3 } from "@/lib/s3"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser()
