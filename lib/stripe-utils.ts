@@ -73,16 +73,19 @@ export async function syncSubscriptionFromStripe(userId: string) {
     const stripeSubscription = stripeSubscriptions.data[0]
     console.log("Syncing subscription to database:", stripeSubscription.id)
     
-    // Access the properties directly from the subscription object
-    const subData: any = stripeSubscription
-    const currentPeriodStart = subData.current_period_start
-    const currentPeriodEnd = subData.current_period_end
+    // Access the properties with proper typing
+    const currentPeriodStart = (stripeSubscription as any).current_period_start
+    const currentPeriodEnd = (stripeSubscription as any).current_period_end
     
     console.log("Period start:", currentPeriodStart, "Period end:", currentPeriodEnd)
 
     // Validate dates before creating
     if (!currentPeriodStart || !currentPeriodEnd) {
       console.error("Invalid period dates from Stripe subscription")
+      console.error("Subscription data:", {
+        id: stripeSubscription.id,
+        status: stripeSubscription.status,
+      })
       return null
     }
 
