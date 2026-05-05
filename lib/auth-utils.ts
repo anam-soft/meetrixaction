@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth"
+import { authOptions } from "./auth"
 import { prisma } from "./prisma"
 
 /**
@@ -7,7 +8,7 @@ import { prisma } from "./prisma"
  */
 export async function getCurrentUser() {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {
       return null
@@ -40,6 +41,6 @@ export async function getCurrentUserId(): Promise<string | null> {
  * Check if user is authenticated
  */
 export async function isAuthenticated(): Promise<boolean> {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
   return !!session?.user
 }
