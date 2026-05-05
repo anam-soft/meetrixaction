@@ -1,19 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { UserButton } from "@clerk/nextjs"
+import { UserButton, useUser } from "@clerk/nextjs"
 import {
   LayoutDashboard,
   Video,
   CheckSquare,
-  BarChart3,
-  CreditCard,
+  Users,
   Settings,
   Menu,
   X,
   Sparkles,
+  Zap,
 } from "lucide-react"
 
 interface DashboardLayoutProps {
@@ -24,14 +24,45 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Meetings", href: "/dashboard/meetings", icon: Video },
   { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
-  { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-  { name: "Usage & Billing", href: "/dashboard/billing", icon: CreditCard },
+  { name: "Team", href: "/dashboard/team", icon: Users },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ]
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isPro, setIsPro] = useState(false)
   const pathname = usePathname()
+  const { user } = useUser()
+
+  useEffect(() => {
+    fetchSubscriptionStatus()
+  }, [])
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const res = await fetch("/api/usage")
+      const data = await res.json()
+      setIsPro(data.isPro || false)
+    } catch (error) {
+      console.error("Failed to fetch subscription status:", error)
+    }
+  }
+
+  const handleUpgrade = async () => {
+    const res = await fetch("/api/stripe/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        priceId:
+          process.env.NEXT_PUBLIC_STRIPE_PRICE_ID ||
+          "price_1TSveBRuoH55oHIo89qWZ8js",
+      }),
+    })
+    const data = await res.json()
+    if (data.url) {
+      window.location.href = data.url
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,19 +74,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Fixed 240px width */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-black/40 backdrop-blur-xl border-r border-white/10 transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 h-full w-60 bg-black/40 backdrop-blur-xl border-r border-white/10 transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between p-6 border-b border-white/10">
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <Sparkles className="w-6 h-6 text-purple-400" />
               <span className="text-lg font-bold gradient-text">AI Tracker</span>
-            </div>
+            </Link>
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:hidden text-muted-foreground hover:text-foreground"
@@ -87,17 +118,37 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             })}
           </nav>
 
-          {/* Footer */}
-          <div className="p-4 border-t border-white/10">
-            <div className="text-xs text-muted-foreground text-center">
-              © 2024 AI Meeting Tracker
+          {/* User section at bottom */}
+          <div className="p-4 border-t border-white/10 space-y-3">
+            {/* User info */}
+            <div className="flex items-center gap-3 px-2">
+              <UserButton afterSignOutUrl="/" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">
+                  {user?.fullName || user?.emailAddresses[0]?.emailAddress}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {isPro ? "Pro Plan" : "Free Plan"}
+                </p>
+              </div>
             </div>
+
+            {/* Upgrade button for free users */}
+            {!isPro && (
+              <button
+                onClick={handleUpgrade}
+                className="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold text-sm hover:shadow-lg transition-shadow flex items-center justify-center gap-2"
+              >
+                <Zap className="w-4 h-4" />
+                Upgrade to Pro
+              </button>
+            )}
           </div>
         </div>
       </aside>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className="lg:pl-60">
         {/* Top bar */}
         <header className="sticky top-0 z-30 border-b border-white/10 bg-black/20 backdrop-blur-xl">
           <div className="flex items-center justify-between px-4 py-4">
@@ -108,7 +159,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Menu className="w-6 h-6" />
             </button>
             <div className="flex-1 lg:flex-none" />
-            <UserButton afterSignOutUrl="/" />
+            <div className="lg:hidden">
+              <UserButton afterSignOutUrl="/" />
+            </div>
           </div>
         </header>
 

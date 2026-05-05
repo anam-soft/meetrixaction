@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { FileAudio, Zap, CheckCircle2, Bell, ArrowRight } from "lucide-react"
+import Navigation from "@/components/Navigation"
+import SocialProof from "@/components/SocialProof"
 import Problem from "@/components/Problem"
 import Solution from "@/components/Solution"
 import HowItWorks from "@/components/HowItWorks"
@@ -13,16 +15,9 @@ import StickyMobileCTA from "@/components/StickyMobileCTA"
 import Footer from "@/components/Footer"
 
 export default function HomePage() {
-  const { isSignedIn } = useUser()
-  const router = useRouter()
-
-  if (isSignedIn) {
-    router.push("/dashboard")
-    return null
-  }
-
   return (
     <>
+      <Navigation />
       <StickyMobileCTA />
       <main className="relative min-h-screen">
       {/* Hero Section */}
@@ -72,20 +67,20 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
             >
-              <SignUpButton mode="modal">
+              <a href="/try">
                 <button className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-semibold text-lg overflow-hidden shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70 transition-shadow">
                   <span className="relative z-10 flex items-center gap-2">
-                    Get Started Free
+                    Try it free — no signup needed
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </button>
-              </SignUpButton>
+              </a>
 
-              <SignInButton mode="modal">
+              <SignUpButton mode="modal">
                 <button className="px-8 py-4 glass rounded-full font-semibold text-lg hover:bg-white/10 transition-colors">
-                  Sign In
+                  Start free account
                 </button>
-              </SignInButton>
+              </SignUpButton>
             </motion.div>
 
             {/* Trust Indicators */}
@@ -138,20 +133,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Social Proof Bar */}
+      <SocialProof />
+
       {/* Problem Section */}
-      <Problem />
+      <section id="features">
+        <Problem />
+      </section>
 
       {/* Solution Section */}
       <Solution />
 
       {/* How It Works Section */}
-      <HowItWorks />
+      <section id="how-it-works">
+        <HowItWorks />
+      </section>
 
       {/* Testimonials Section */}
       <Testimonials />
 
       {/* Pricing Section */}
-      <section className="relative py-32 overflow-hidden">
+      <section id="pricing" className="relative py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/10 rounded-full blur-3xl"></div>
         </div>
@@ -251,6 +253,14 @@ export default function HomePage() {
                   <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
                   <span>Custom integrations</span>
                 </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>Weekly accountability digest</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>AI meeting health score</span>
+                </li>
               </ul>
               <SignUpButton mode="modal">
                 <button className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70 transition-shadow">
@@ -263,7 +273,9 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <FAQ />
+      <section id="faq">
+        <FAQ />
+      </section>
 
       {/* Final CTA Section */}
       <section className="relative py-32 overflow-hidden">
@@ -336,28 +348,18 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               >
-                <SignUpButton mode="modal">
+                <a href="/try">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-semibold text-lg shadow-lg shadow-purple-500/50 hover:shadow-purple-500/70 transition-shadow"
                   >
                     <span className="flex items-center gap-2">
-                      Try 5 Meetings Free
+                      Start free
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </motion.button>
-                </SignUpButton>
-
-                <SignInButton mode="modal">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 glass rounded-full font-semibold text-lg hover:bg-white/10 transition-colors"
-                  >
-                    Sign In
-                  </motion.button>
-                </SignInButton>
+                </a>
               </motion.div>
 
               {/* Trust Indicators */}

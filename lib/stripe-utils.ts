@@ -115,11 +115,16 @@ export async function syncSubscriptionFromStripe(userId: string) {
       currentPeriodEnd = fullSubscription.created + (30 * 24 * 60 * 60)
     }
 
+    // Extract customer ID (could be string or object)
+    const customerId = typeof fullSubscription.customer === 'string'
+      ? fullSubscription.customer
+      : fullSubscription.customer.id
+
     subscription = await prisma.subscriptions.upsert({
       where: { user_id: userId },
       update: {
         stripe_subscription_id: fullSubscription.id,
-        stripe_customer_id: fullSubscription.customer as string,
+        stripe_customer_id: customerId,
         stripe_price_id: fullSubscription.items.data[0].price.id,
         stripe_status: fullSubscription.status,
         plan: "pro",
@@ -132,7 +137,7 @@ export async function syncSubscriptionFromStripe(userId: string) {
         id: crypto.randomUUID(),
         user_id: userId,
         stripe_subscription_id: fullSubscription.id,
-        stripe_customer_id: fullSubscription.customer as string,
+        stripe_customer_id: customerId,
         stripe_price_id: fullSubscription.items.data[0].price.id,
         stripe_status: fullSubscription.status,
         plan: "pro",
