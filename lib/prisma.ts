@@ -4,18 +4,28 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Only initialize Prisma if DATABASE_URL is available
-// This prevents build errors when database is not accessible
-let prismaInstance: PrismaClient | undefined
+// Create a mock Prisma client for build time
+const createPrismaClient = () => {
+  // During build time, if DATABASE_URL is not available, return a mock client
+  if (!process.env.DATABASE_URL) {
+    console.warn('DATABASE_URL not found, using mock Prisma client for build')
+    return new Proxy({} as PrismaClient, {
+      get: () => {
+        return new Proxy(() => {}, {
+          apply: () => Promise.resolve(null),
+          get: () => createPrismaClient()
+        })
+      }
+    })
+  }
 
-if (process.env.DATABASE_URL) {
-  prismaInstance = globalForPrisma.prisma ?? new PrismaClient({
+  return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   })
-  
-  if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = prismaInstance
-  }
 }
 
-export const prisma = prismaInstance as PrismaClient
+export const prisma = globalForPrisma.prisma ?? createPrismaClient()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma
+}
