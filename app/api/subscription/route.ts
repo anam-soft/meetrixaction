@@ -13,14 +13,26 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    console.log("📊 Fetching subscription for user:", user.id)
+
     // Get user's subscription
     let subscription = await prisma.subscriptions.findUnique({
       where: { user_id: user.id },
     })
 
-    // If no subscription found locally or not active, try syncing from Stripe
+    console.log("Local subscription:", subscription ? `${subscription.plan} (${subscription.stripe_status})` : "none")
+
+    // Always try syncing from Stripe if not active to catch any missed webhooks
     if (!subscription || subscription.stripe_status !== "active") {
-      subscription = await syncSubscriptionFromStripe(user.id)
+      console.log("🔄 Attempting to sync from Stripe...")
+      const syncedSubscription = await syncSubscriptionFromStripe(user.id)
+      
+      if (syncedSubscription) {
+        console.log("✅ Synced subscription from Stripe:", syncedSubscription.plan)
+        subscription = syncedSubscription
+      } else {
+        console.log("ℹ️ No active subscription in Stripe")
+      }
     }
 
     if (!subscription) {

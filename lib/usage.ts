@@ -15,9 +15,17 @@ export async function checkUsageLimit(userId: string): Promise<{
     where: { user_id: userId },
   })
 
-  // If no active subscription found locally, try syncing from Stripe
+  // Always try to sync from Stripe if not active locally
+  // This ensures we catch any payments that completed but webhooks failed
   if (!subscription || subscription.stripe_status !== "active") {
+    console.log("🔄 No active local subscription, syncing from Stripe for user:", userId)
     subscription = await syncSubscriptionFromStripe(userId)
+    
+    if (subscription) {
+      console.log("✅ Successfully synced subscription:", subscription.plan, subscription.stripe_status)
+    } else {
+      console.log("ℹ️ No active subscription found in Stripe")
+    }
   }
 
   const isPro = subscription?.plan === "pro" && subscription?.stripe_status === "active"
