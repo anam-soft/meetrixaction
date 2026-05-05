@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  id                  String  @id
+  user_id             String
+  type                String
+  provider            String
+  provider_account_id String
+  refresh_token       String?
+  access_token        String?
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?
+  session_state       String?
+  users               users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([provider, provider_account_id])
+}
+
+model meetings {
+  id         String   @id
+  title      String
+  file_name  String?
+  file_path  String?
+  file_size  Int?
+  file_type  String?
+  status     String   @default("uploaded")
+  summary    String?
+  decisions  String?
+  transcript String?
+  duration   Int?
+  created_at DateTime @default(now())
+  updated_at DateTime
+  team_id    String?
+  user_id    String?
+  teams      teams?   @relation(fields: [team_id], references: [id])
+  users      users?   @relation(fields: [user_id], references: [id])
+  tasks      tasks[]
+}
+
+model sessions {
+  id            String   @id
+  session_token String   @unique
+  user_id       String
+  expires       DateTime
+  users         users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model subscriptions {
+  id                     String   @id
+  user_id                String   @unique
+  stripe_customer_id     String
+  stripe_subscription_id String   @unique
+  stripe_price_id        String
+  current_period_end     DateTime
+  cancel_at_period_end   Boolean  @default(false)
+  created_at             DateTime @default(now())
+  updated_at             DateTime
+  current_period_start   DateTime
+  stripe_status          String
+  plan                   String   @default("free")
+  users                  users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model tasks {
+  id           String    @id
+  title        String
+  description  String?
+  status       String    @default("pending")
+  priority     String    @default("medium")
+  assignee_id  String?
+  meeting_id   String
+  deadline     DateTime?
+  completed_at DateTime?
+  confidence   Float?    @default(0.0)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime
+  users        users?    @relation(fields: [assignee_id], references: [id])
+  meetings     meetings  @relation(fields: [meeting_id], references: [id], onDelete: Cascade)
+}
+
+model team_members {
+  id        String   @id
+  team_id   String
+  user_id   String
+  role      String   @default("member")
+  joined_at DateTime @default(now())
+  teams     teams    @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  users     users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([team_id, user_id])
+}
+
+model teams {
+  id           String         @id
+  name         String
+  created_at   DateTime       @default(now())
+  updated_at   DateTime
+  meetings     meetings[]
+  team_members team_members[]
+}
+
+model usage_records {
+  id               String   @id
+  user_id          String
+  month            String
+  meetings_created Int      @default(0)
+  ai_processed     Int      @default(0)
+  created_at       DateTime @default(now())
+  updated_at       DateTime
+
+  @@unique([user_id, month])
+}
+
+model users {
+  id             String         @id
+  clerk_id       String?        @unique
+  email          String?        @unique
+  email_verified DateTime?
+  name           String?
+  image          String?
+  created_at     DateTime       @default(now())
+  updated_at     DateTime
+  avatar         String?
+  role           String         @default("MEMBER")
+  accounts       accounts[]
+  meetings       meetings[]
+  sessions       sessions[]
+  subscriptions  subscriptions?
+  tasks          tasks[]
+  team_members   team_members[]
+}
+
+model verification_tokens {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
