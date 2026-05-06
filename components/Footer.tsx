@@ -52,7 +52,7 @@ export default function Footer() {
               className="mb-4"
             >
               <div className="text-2xl font-bold gradient-text mb-3">
-                AI Meeting Tracker
+                MeetRix Action
               </div>
               <p className="text-sm text-muted-foreground">
                 Turn meetings into completed work automatically with AI-powered action tracking.
@@ -116,7 +116,7 @@ export default function Footer() {
           className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <p className="text-sm text-muted-foreground">
-            © 2025 MeetRix Action. All rights reserved.
+            © 2026 MeetRix Action. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <a href="/privacy" className="hover:text-foreground transition-colors">
