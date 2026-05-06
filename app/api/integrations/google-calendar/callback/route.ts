@@ -1,6 +1,6 @@
 /**
  * Google Calendar OAuth Callback Route
- * 
+ *
  * Handles the OAuth callback from Google after user authorization.
  * Exchanges the authorization code for access and refresh tokens,
  * then stores them in the database.
@@ -8,10 +8,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { 
-  exchangeCodeForTokens, 
-  getUserEmail 
+import {
+  exchangeCodeForTokens,
+  getUserEmail
 } from '@/lib/google-calendar';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

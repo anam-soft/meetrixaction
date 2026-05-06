@@ -11,6 +11,8 @@ import { getCurrentUser } from '@/lib/auth-utils';
 import { prisma } from '@/lib/prisma';
 import { revokeToken } from '@/lib/google-calendar';
 
+export const dynamic = 'force-dynamic'; 
+
 /**
  * GET - Check if Google Calendar is connected
  */
