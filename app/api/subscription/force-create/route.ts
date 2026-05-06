@@ -12,6 +12,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    console.log("🔧 Force creating subscription for user:", user.id)
+    console.log("User email:", user.email)
 
     // Your subscription details from Stripe
     const subscriptionData = {
@@ -55,6 +57,9 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log("✅ Subscription created/updated:", subscription.id)
+    console.log("Plan:", subscription.plan)
+    console.log("Status:", subscription.stripe_status)
 
     return NextResponse.json({
       success: true,
@@ -68,6 +73,7 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
+    console.error("Force create subscription error:", error)
     return NextResponse.json(
       { 
         success: false,

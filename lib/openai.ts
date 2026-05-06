@@ -71,6 +71,7 @@ function mockAnalyzeMeetingTranscript(transcript: string): MeetingAnalysis {
 export async function analyzeMeetingTranscript(transcript: string): Promise<MeetingAnalysis> {
   // If no OpenAI key, use mock analysis
   if (!openai) {
+    console.warn("OpenAI API key not configured. Using mock analysis for development.")
     return mockAnalyzeMeetingTranscript(transcript)
   }
 
@@ -135,6 +136,7 @@ Respond in JSON format:
     
     return analysis
   } catch (error) {
+    console.error("OpenAI API error, falling back to mock analysis:", error)
     return mockAnalyzeMeetingTranscript(transcript)
   }
 }
@@ -164,6 +166,7 @@ Sample meeting content:
 export async function transcribeAudio(audioUrl: string): Promise<string> {
   // If no OpenAI key, return mock transcription
   if (!openai) {
+    console.warn("OpenAI API key not configured. Using mock transcription for development.")
     const fileName = audioUrl.split('/').pop() || 'audio file'
     return mockTranscribeAudio(fileName)
   }
@@ -182,6 +185,7 @@ export async function transcribeAudio(audioUrl: string): Promise<string> {
     
     return transcription.text
   } catch (error) {
+    console.error("OpenAI transcription error, falling back to mock:", error)
     const fileName = audioUrl.split('/').pop() || 'audio file'
     return mockTranscribeAudio(fileName)
   }

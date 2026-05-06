@@ -8,6 +8,7 @@ const globalForPrisma = globalThis as unknown as {
 const createPrismaClient = () => {
   // During build time, if DATABASE_URL is not available, return a mock client
   if (!process.env.DATABASE_URL) {
+    console.warn('DATABASE_URL not found, using mock Prisma client for build')
     return new Proxy({} as PrismaClient, {
       get: () => {
         return new Proxy(() => {}, {

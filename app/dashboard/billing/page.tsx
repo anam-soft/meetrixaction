@@ -46,25 +46,30 @@ export default function BillingPage() {
   const fetchData = async () => {
     setLoading(true)
     try {
+      console.log("🔄 Fetching usage and subscription data...")
       
       // Fetch usage first (this will auto-sync from Stripe if needed)
       const usageRes = await fetch("/api/usage")
       const usageData = await usageRes.json()
+      console.log("Usage data:", usageData)
       setUsage(usageData)
 
       // Always fetch subscription to get latest status
       const subRes = await fetch("/api/subscription")
       const subData = await subRes.json()
+      console.log("Subscription data:", subData)
       
       if (subData.subscription) {
         setSubscription(subData.subscription)
         
         // If subscription is active but usage says not pro, refresh
         if (subData.subscription.stripe_status === 'active' && !usageData.isPro) {
+          console.log("⚠️ Subscription active but usage not updated, refreshing...")
           setTimeout(() => window.location.reload(), 1000)
         }
       }
     } catch (error) {
+      console.error("Failed to fetch data:", error)
     } finally {
       setLoading(false)
     }

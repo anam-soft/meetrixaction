@@ -81,6 +81,7 @@ export default function OnboardingChecklist({ onComplete }: OnboardingChecklistP
 
       setDismissed(data.onboardingDismissed || false);
     } catch (error) {
+      console.error("Failed to fetch onboarding progress:", error);
     } finally {
       setLoading(false);
     }
@@ -92,6 +93,7 @@ export default function OnboardingChecklist({ onComplete }: OnboardingChecklistP
       setDismissed(true);
       onComplete?.();
     } catch (error) {
+      console.error("Failed to dismiss onboarding:", error);
     }
   };
 

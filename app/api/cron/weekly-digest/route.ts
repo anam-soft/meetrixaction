@@ -151,6 +151,7 @@ export async function POST(request: NextRequest) {
         // Send email (integrate with your email service)
         // Example: await sendEmail(user.email, "Your team's week in review — MeetRix Action", emailHtml);
         
+        console.log(`Digest prepared for ${user.email}`);
         results.push({
           userId: user.id,
           email: user.email,
@@ -159,6 +160,7 @@ export async function POST(request: NextRequest) {
         });
 
       } catch (error) {
+        console.error(`Failed to generate digest for user ${user.id}:`, error);
         results.push({
           userId: user.id,
           email: user.email,
@@ -175,6 +177,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
+    console.error("Weekly digest cron error:", error);
     return NextResponse.json(
       { error: "Failed to process weekly digests" },
       { status: 500 }

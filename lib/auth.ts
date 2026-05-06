@@ -24,10 +24,12 @@ export const authOptions: AuthOptions = {
         try {
           // Check if we have a valid DATABASE_URL
           if (!process.env.DATABASE_URL) {
+            console.error("DATABASE_URL not configured")
             return null
           }
 
           if (!prisma) {
+            console.error("Prisma client not initialized")
             return null
           }
 
@@ -54,6 +56,7 @@ export const authOptions: AuthOptions = {
             name: user.name,
           }
         } catch (error) {
+          console.error("Auth error:", error)
           return null
         }
       },

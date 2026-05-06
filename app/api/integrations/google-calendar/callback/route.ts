@@ -119,6 +119,7 @@ export async function GET(request: NextRequest) {
       )
     );
   } catch (error) {
+    console.error('Error in Google Calendar OAuth callback:', error);
     
     return NextResponse.redirect(
       new URL(

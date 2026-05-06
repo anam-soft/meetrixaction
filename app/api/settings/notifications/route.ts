@@ -32,12 +32,14 @@ export async function POST(req: NextRequest) {
 
     // In production, you would save these settings to a user_settings table
     // For now, just log and return success
+    console.log("Notification settings saved:", body)
 
     return NextResponse.json({
       success: true,
       message: "Notification settings saved",
     })
   } catch (error) {
+    console.error("Error saving notification settings:", error)
     return NextResponse.json(
       { error: "Failed to save settings" },
       { status: 500 }
@@ -67,6 +69,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ settings })
   } catch (error) {
+    console.error("Error fetching notification settings:", error)
     return NextResponse.json(
       { error: "Failed to fetch settings" },
       { status: 500 }

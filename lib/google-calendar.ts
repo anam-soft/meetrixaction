@@ -57,6 +57,7 @@ export async function exchangeCodeForTokens(code: string) {
     const { tokens } = await oauth2Client.getToken(code);
     return tokens;
   } catch (error) {
+    console.error('Error exchanging code for tokens:', error);
     throw new Error('Failed to exchange authorization code');
   }
 }
@@ -74,6 +75,7 @@ export async function getUserEmail(accessToken: string) {
     const { data } = await oauth2.userinfo.get();
     return data.email || null;
   } catch (error) {
+    console.error('Error getting user email:', error);
     return null;
   }
 }
@@ -108,6 +110,7 @@ async function refreshAccessToken(integration: any) {
 
     return credentials.access_token!;
   } catch (error) {
+    console.error('Error refreshing access token:', error);
     throw new Error('Failed to refresh access token');
   }
 }
@@ -166,6 +169,7 @@ export async function revokeToken(accessToken: string) {
     await oauth2Client.revokeToken(accessToken);
     return true;
   } catch (error) {
+    console.error('Error revoking token:', error);
     return false;
   }
 }
@@ -214,6 +218,7 @@ async function findCalendarEvent(
       event.summary?.toLowerCase().includes(eventTitle.toLowerCase())
     ) || null;
   } catch (error) {
+    console.error('Error finding calendar event:', error);
     return null;
   }
 }
@@ -243,6 +248,7 @@ export async function attachTasksToEvent(
     const event = await findCalendarEvent(calendar, eventTitle, date);
     
     if (!event) {
+      console.log(`No calendar event found for "${eventTitle}" on ${date.toDateString()}`);
       return {
         success: false,
         message: 'Calendar event not found',
@@ -280,6 +286,7 @@ export async function attachTasksToEvent(
       eventId: event.id,
     };
   } catch (error) {
+    console.error('Error attaching tasks to event:', error);
     return {
       success: false,
       message: error instanceof Error ? error.message : 'Failed to attach tasks',
@@ -310,6 +317,7 @@ export async function listUpcomingEvents(userId: string, maxResults: number = 10
 
     return response.data.items || [];
   } catch (error) {
+    console.error('Error listing events:', error);
     throw error;
   }
 }

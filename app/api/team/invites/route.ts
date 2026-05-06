@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ invites })
   } catch (error) {
+    console.error("Error fetching invites:", error)
     return NextResponse.json(
       { error: "Failed to fetch invites" },
       { status: 500 }
@@ -42,6 +43,7 @@ export async function DELETE(req: NextRequest) {
     // In production, delete from pending_invites table
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error("Error canceling invite:", error)
     return NextResponse.json(
       { error: "Failed to cancel invite" },
       { status: 500 }
