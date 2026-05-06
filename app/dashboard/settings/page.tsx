@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useUser } from "@clerk/nextjs"
+import { useSearchParams } from "next/navigation"
 import DashboardLayout from "@/components/DashboardLayout"
 import {
   User,
@@ -14,6 +15,7 @@ import {
   MessageSquare,
   Calendar as CalendarIcon,
   Video,
+  Loader2,
 } from "lucide-react"
 
 type TabType = "profile" | "notifications" | "integrations" | "billing"
@@ -32,13 +34,18 @@ interface Integration {
   icon: any
   connected: boolean
   description: string
+  accountEmail?: string
+  connectedAt?: string
 }
 
 export default function SettingsPage() {
   const { user } = useUser()
+  const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState<TabType>("profile")
   const [loading, setLoading] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [integrationLoading, setIntegrationLoading] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   // Profile state
   const [name, setName] = useState("")
@@ -85,7 +92,31 @@ export default function SettingsPage() {
       setEmail(user.emailAddresses[0]?.emailAddress || "")
     }
     fetchSubscription()
-  }, [user])
+    fetchGoogleCalendarStatus()
+    
+    // Check for URL parameters (OAuth callback)
+    const tab = searchParams.get('tab')
+    const connected = searchParams.get('connected')
+    const error = searchParams.get('error')
+    
+    if (tab === 'integrations') {
+      setActiveTab('integrations')
+      
+      if (connected === 'google_calendar') {
+        showToast('Google Calendar connected successfully!', 'success')
+        fetchGoogleCalendarStatus()
+      } else if (error) {
+        const errorMessages: Record<string, string> = {
+          access_denied: 'You denied access to Google Calendar',
+          invalid_callback: 'Invalid OAuth callback',
+          invalid_state: 'Invalid security token',
+          expired_state: 'Security token expired',
+          connection_failed: 'Failed to connect Google Calendar',
+        }
+        showToast(errorMessages[error] || 'Failed to connect', 'error')
+      }
+    }
+  }, [user, searchParams])
 
   const fetchSubscription = async () => {
     try {
@@ -95,6 +126,33 @@ export default function SettingsPage() {
     } catch (error) {
       console.error("Failed to fetch subscription:", error)
     }
+  }
+
+  const fetchGoogleCalendarStatus = async () => {
+    try {
+      const res = await fetch("/api/integrations/google-calendar")
+      const data = await res.json()
+      
+      setIntegrations(prev =>
+        prev.map(int =>
+          int.name === "Google Calendar"
+            ? {
+                ...int,
+                connected: data.connected || false,
+                accountEmail: data.accountEmail,
+                connectedAt: data.connectedAt,
+              }
+            : int
+        )
+      )
+    } catch (error) {
+      console.error("Failed to fetch Google Calendar status:", error)
+    }
+  }
+
+  const showToast = (message: string, type: 'success' | 'error') => {
+    setToast({ message, type })
+    setTimeout(() => setToast(null), 5000)
   }
 
   const handleSaveProfile = async () => {
@@ -130,18 +188,50 @@ export default function SettingsPage() {
   }
 
   const handleConnectIntegration = async (integrationName: string) => {
-    // Simulate OAuth flow
-    alert(`Connecting to ${integrationName}... (OAuth flow would happen here)`)
+    if (integrationName === "Google Calendar") {
+      // Redirect to Google OAuth flow
+      window.location.href = "/api/integrations/google-calendar/connect"
+    } else {
+      // Other integrations coming soon
+      showToast(`${integrationName} integration coming soon!`, 'error')
+    }
   }
 
   const handleDisconnectIntegration = async (integrationName: string) => {
     if (!confirm(`Disconnect ${integrationName}?`)) return
     
-    setIntegrations(prev =>
-      prev.map(int =>
-        int.name === integrationName ? { ...int, connected: false } : int
+    if (integrationName === "Google Calendar") {
+      setIntegrationLoading(integrationName)
+      try {
+        const res = await fetch("/api/integrations/google-calendar", {
+          method: "DELETE",
+        })
+        
+        if (res.ok) {
+          setIntegrations(prev =>
+            prev.map(int =>
+              int.name === integrationName
+                ? { ...int, connected: false, accountEmail: undefined, connectedAt: undefined }
+                : int
+            )
+          )
+          showToast("Google Calendar disconnected successfully", 'success')
+        } else {
+          throw new Error("Failed to disconnect")
+        }
+      } catch (error) {
+        console.error("Failed to disconnect Google Calendar:", error)
+        showToast("Failed to disconnect Google Calendar", 'error')
+      } finally {
+        setIntegrationLoading(null)
+      }
+    } else {
+      setIntegrations(prev =>
+        prev.map(int =>
+          int.name === integrationName ? { ...int, connected: false } : int
+        )
       )
-    )
+    }
   }
 
   const handleManageBilling = async () => {
@@ -191,6 +281,20 @@ export default function SettingsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        {/* Toast Notification */}
+        {toast && (
+          <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg border ${
+            toast.type === 'success'
+              ? 'bg-green-500/20 border-green-500/50 text-green-400'
+              : 'bg-red-500/20 border-red-500/50 text-red-400'
+          }`}>
+            <div className="flex items-center gap-2">
+              {toast.type === 'success' ? <Check className="w-5 h-5" /> : <ExternalLink className="w-5 h-5" />}
+              <p className="font-medium">{toast.message}</p>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold gradient-text mb-2">Settings</h1>
@@ -444,20 +548,26 @@ export default function SettingsPage() {
                 <div className="space-y-4 max-w-2xl">
                   {integrations.map((integration) => {
                     const Icon = integration.icon
+                    const isLoading = integrationLoading === integration.name
                     return (
                       <div
                         key={integration.name}
                         className="p-4 rounded-lg bg-white/5 border border-white/10 flex items-center justify-between gap-4"
                       >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 flex-1">
                           <div className="p-3 rounded-lg bg-white/10">
                             <Icon className="w-6 h-6" />
                           </div>
-                          <div>
+                          <div className="flex-1">
                             <h3 className="font-semibold mb-1">{integration.name}</h3>
                             <p className="text-sm text-muted-foreground">
                               {integration.description}
                             </p>
+                            {integration.connected && integration.accountEmail && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Connected as: {integration.accountEmail}
+                              </p>
+                            )}
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -468,16 +578,20 @@ export default function SettingsPage() {
                               </span>
                               <button
                                 onClick={() => handleDisconnectIntegration(integration.name)}
-                                className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors font-medium text-sm"
+                                disabled={isLoading}
+                                className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors font-medium text-sm disabled:opacity-50 flex items-center gap-2"
                               >
+                                {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                                 Disconnect
                               </button>
                             </>
                           ) : (
                             <button
                               onClick={() => handleConnectIntegration(integration.name)}
-                              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg transition-shadow text-sm"
+                              disabled={isLoading}
+                              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg transition-shadow text-sm disabled:opacity-50 flex items-center gap-2"
                             >
+                              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                               Connect
                             </button>
                           )}

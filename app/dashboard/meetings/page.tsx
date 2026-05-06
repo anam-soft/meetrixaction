@@ -1,9 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import DashboardLayout from "@/components/DashboardLayout"
-import UploadMeeting from "@/components/UploadMeeting"
+import UploadModal from "@/components/UploadModal"
 import UpgradeLimitModal from "@/components/UpgradeLimitModal"
 import {
   Upload,
@@ -24,6 +25,7 @@ interface Meeting {
 }
 
 export default function MeetingsPage() {
+  const router = useRouter()
   const [meetings, setMeetings] = useState<Meeting[]>([])
   const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([])
   const [loading, setLoading] = useState(true)
@@ -32,6 +34,7 @@ export default function MeetingsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterPeriod, setFilterPeriod] = useState<"all" | "week" | "month">("all")
   const [canUpload, setCanUpload] = useState(true)
+  const [isPro, setIsPro] = useState(false)
 
   useEffect(() => {
     fetchMeetings()
@@ -57,6 +60,7 @@ export default function MeetingsPage() {
     const res = await fetch("/api/usage")
     const data = await res.json()
     setCanUpload(data.canUpload)
+    setIsPro(data.isPro || false)
   }
 
   const filterMeetings = () => {
@@ -107,10 +111,11 @@ export default function MeetingsPage() {
     }
   }
 
-  const handleUploadComplete = () => {
-    setShowUploadModal(false)
+  const handleUploadComplete = (meetingId: string) => {
     fetchMeetings()
     checkUsage()
+    // Navigate to meeting detail
+    router.push(`/dashboard/meetings/${meetingId}`)
   }
 
   if (loading) {
@@ -296,24 +301,12 @@ export default function MeetingsPage() {
       </div>
 
       {/* Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-black/90 border border-white/10 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold gradient-text">Upload Meeting</h2>
-                <button
-                  onClick={() => setShowUploadModal(false)}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  ✕
-                </button>
-              </div>
-              <UploadMeeting onComplete={handleUploadComplete} />
-            </div>
-          </div>
-        </div>
-      )}
+      <UploadModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        onComplete={handleUploadComplete}
+        isPro={isPro}
+      />
 
       {/* Limit Modal */}
       <UpgradeLimitModal

@@ -85,7 +85,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex items-center justify-between p-6 border-b border-white/10">
             <Link href="/" className="flex items-center gap-2">
               <Sparkles className="w-6 h-6 text-purple-400" />
-              <span className="text-lg font-bold gradient-text">AI Tracker</span>
+              <span className="text-lg font-bold gradient-text">MeetRix Action</span>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

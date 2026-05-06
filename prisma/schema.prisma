@@ -106,6 +106,7 @@ model teams {
   updated_at   DateTime
   meetings     meetings[]
   team_members team_members[]
+  integrations integrations[]
 }
 
 model usage_records {
@@ -138,6 +139,26 @@ model users {
   subscriptions  subscriptions?
   tasks          tasks[]
   team_members   team_members[]
+  integrations   integrations[]
+}
+
+model integrations {
+  id                String    @id @default(uuid())
+  user_id           String
+  team_id           String?
+  provider          String
+  access_token      String?
+  refresh_token     String?
+  token_expires_at  DateTime?
+  account_email     String?
+  settings          Json      @default("{}")
+  connected_at      DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  users             users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  teams             teams?    @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, provider])
+  @@index([team_id])
 }
 
 model verification_tokens {

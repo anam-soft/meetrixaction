@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-auth-mvp",
+  "name": "meetrix-action",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -26,6 +26,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.38.0",
+    "googleapis": "^171.4.0",
     "lucide-react": "^1.14.0",
     "next": "^14.2.0",
     "next-auth": "^4.24.0",

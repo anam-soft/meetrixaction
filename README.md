@@ -1,4 +1,4 @@
-# 🎯 AI Meeting Action Tracker SaaS
+# 🎯 MeetRix Action
 
 > **An execution engine for teams** - Turn meetings into structured, assigned, and completed tasks automatically.
 

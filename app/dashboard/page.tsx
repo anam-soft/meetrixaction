@@ -1,10 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import DashboardLayout from "@/components/DashboardLayout"
 import UpgradeSuccessToast from "@/components/UpgradeSuccessToast"
+import UploadModal from "@/components/UploadModal"
+import UpgradeNudge from "@/components/UpgradeNudge"
+import { useUpgradeNudge } from "@/lib/useUpgradeNudge"
 import {
   FileAudio,
   CheckCircle2,
@@ -42,12 +45,15 @@ interface Usage {
 
 export default function DashboardPage() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [meetings, setMeetings] = useState<Meeting[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [usage, setUsage] = useState<Usage | null>(null)
   const [loading, setLoading] = useState(true)
   const [showSuccessToast, setShowSuccessToast] = useState(false)
   const [showUploadModal, setShowUploadModal] = useState(false)
+  
+  const upgradeNudge = useUpgradeNudge()
 
   useEffect(() => {
     fetchData()
@@ -92,6 +98,11 @@ export default function DashboardPage() {
     const res = await fetch("/api/usage")
     const data = await res.json()
     setUsage(data)
+    
+    // Check if we should show upgrade nudge based on usage
+    if (data && !data.isPro) {
+      upgradeNudge.checkMeetingLimit(data.currentUsage, data.limit, data.isPro)
+    }
   }
 
   const syncSubscription = async () => {
@@ -109,6 +120,13 @@ export default function DashboardPage() {
     await fetch(`/api/meetings?id=${meetingId}`, { method: "DELETE" })
     fetchMeetings()
     fetchTasks()
+  }
+
+  const handleUploadComplete = (meetingId: string) => {
+    // Refresh data
+    fetchData()
+    // Navigate to meeting detail
+    router.push(`/dashboard/meetings/${meetingId}`)
   }
 
   // Calculate metrics
@@ -148,6 +166,24 @@ export default function DashboardPage() {
         onClose={() => setShowSuccessToast(false)}
       />
 
+      {/* Upload Modal */}
+      <UploadModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        onComplete={handleUploadComplete}
+        isPro={usage?.isPro || false}
+      />
+
+      {/* Upgrade Nudge */}
+      <UpgradeNudge
+        show={upgradeNudge.showNudge}
+        onClose={upgradeNudge.dismissNudge}
+        trigger={upgradeNudge.nudgeTrigger || "meeting-limit"}
+        currentUsage={upgradeNudge.currentUsage}
+        limit={upgradeNudge.limit}
+        featureName={upgradeNudge.featureName}
+      />
+
       <div className="space-y-6">
         {/* Header with Upload Button */}
         <div className="flex items-center justify-between">
@@ -157,13 +193,13 @@ export default function DashboardPage() {
               Welcome back! Here's your productivity overview.
             </p>
           </div>
-          <Link
-            href="/dashboard/meetings"
+          <button
+            onClick={() => setShowUploadModal(true)}
             className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg transition-shadow flex items-center gap-2"
           >
             <Upload className="w-5 h-5" />
             Upload Meeting
-          </Link>
+          </button>
         </div>
 
         {/* Row 1: 4 Metric Cards */}
@@ -234,13 +270,13 @@ export default function DashboardPage() {
               <p className="text-lg text-muted-foreground mb-4">
                 No meetings yet. Upload your first meeting.
               </p>
-              <Link
-                href="/dashboard/meetings"
+              <button
+                onClick={() => setShowUploadModal(true)}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg transition-shadow"
               >
                 <Upload className="w-5 h-5" />
                 Upload Meeting
-              </Link>
+              </button>
             </div>
           ) : (
             <div className="overflow-x-auto">

@@ -24,8 +24,8 @@ const footerLinks = {
     { label: "Support", href: "#" },
   ],
   legal: [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
     { label: "Security", href: "#" },
     { label: "Cookie Policy", href: "#" },
   ],
@@ -119,10 +119,10 @@ export default function Footer() {
             © 2025 MeetRix Action. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">
+            <a href="/privacy" className="hover:text-foreground transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-foreground transition-colors">
+            <a href="/terms" className="hover:text-foreground transition-colors">
               Terms of Service
             </a>
             <a href="#" className="hover:text-foreground transition-colors">
