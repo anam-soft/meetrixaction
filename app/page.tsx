@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { FileAudio, Zap, CheckCircle2, Bell, ArrowRight } from "lucide-react"
 import Navigation from "@/components/Navigation"
 import SocialProof from "@/components/SocialProof"
+import CompanyLogos from "@/components/CompanyLogos"
 import Problem from "@/components/Problem"
 import Solution from "@/components/Solution"
 import HowItWorks from "@/components/HowItWorks"
@@ -135,6 +136,9 @@ export default function HomePage() {
 
       {/* Social Proof Bar */}
       <SocialProof />
+
+      {/* Company Logos */}
+      <CompanyLogos />
 
       {/* Problem Section */}
       <section id="features">
