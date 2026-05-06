@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs"
+import { SubscriptionProvider } from "@/lib/subscription-context"
 import "./globals.css"
 import { Inter } from "next/font/google"
 
@@ -34,11 +35,12 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
+}
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 }
 
 export default function RootLayout({
@@ -50,7 +52,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="dark">
         <body className={inter.className}>
-          {children}
+          <SubscriptionProvider>
+            {children}
+          </SubscriptionProvider>
         </body>
       </html>
     </ClerkProvider>

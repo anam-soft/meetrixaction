@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { UserButton, useUser } from "@clerk/nextjs"
+import { useSubscription } from "@/lib/subscription-context"
 import {
   LayoutDashboard,
   Video,
@@ -30,23 +31,9 @@ const navigation = [
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [isPro, setIsPro] = useState(false)
   const pathname = usePathname()
   const { user } = useUser()
-
-  useEffect(() => {
-    fetchSubscriptionStatus()
-  }, [])
-
-  const fetchSubscriptionStatus = async () => {
-    try {
-      const res = await fetch("/api/usage")
-      const data = await res.json()
-      setIsPro(data.isPro || false)
-    } catch (error) {
-      console.error("Failed to fetch subscription status:", error)
-    }
-  }
+  const { isPro, isLoading } = useSubscription()
 
   const handleUpgrade = async () => {
     const res = await fetch("/api/stripe/checkout", {
@@ -133,8 +120,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </div>
 
-            {/* Upgrade button for free users */}
-            {!isPro && (
+            {/* Upgrade button for free users - only show when loaded */}
+            {!isLoading && !isPro && (
               <button
                 onClick={handleUpgrade}
                 className="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold text-sm hover:shadow-lg transition-shadow flex items-center justify-center gap-2"
