@@ -18,11 +18,6 @@ export async function POST(request: NextRequest) {
     const user = await getCurrentUser()
     const eventData: AnalyticsEvent = await request.json()
 
-    // Log event (in production, send to analytics service)
-      ...eventData,
-      userId: user?.id || eventData.userId,
-    })
-
     // Store in database for internal analytics
     // You could create an analytics_events table for this
     
