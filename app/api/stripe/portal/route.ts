@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/auth-utils"
 import { prisma } from "@/lib/prisma"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-04-22.dahlia",
+  apiVersion: "2026-04-22.dahlia" as any,
 })
 
 export const dynamic = 'force-dynamic'
