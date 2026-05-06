@@ -35,6 +35,8 @@ export default function MeetingsPage() {
   const [filterPeriod, setFilterPeriod] = useState<"all" | "week" | "month">("all")
   const [canUpload, setCanUpload] = useState(true)
   const [isPro, setIsPro] = useState(false)
+  const [currentUsage, setCurrentUsage] = useState(0)
+  const [usageLimit, setUsageLimit] = useState(5)
 
   useEffect(() => {
     fetchMeetings()
@@ -61,6 +63,8 @@ export default function MeetingsPage() {
     const data = await res.json()
     setCanUpload(data.canUpload)
     setIsPro(data.isPro || false)
+    setCurrentUsage(data.currentUsage || 0)
+    setUsageLimit(data.limit || 5)
   }
 
   const filterMeetings = () => {
@@ -310,8 +314,10 @@ export default function MeetingsPage() {
 
       {/* Limit Modal */}
       <UpgradeLimitModal
-        show={showLimitModal}
+        isOpen={showLimitModal}
         onClose={() => setShowLimitModal(false)}
+        currentUsage={currentUsage}
+        limit={usageLimit}
       />
     </DashboardLayout>
   )
