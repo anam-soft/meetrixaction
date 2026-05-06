@@ -7,20 +7,15 @@ import { prisma } from "./prisma"
  */
 export async function getCurrentUser() {
   try {
-    console.log("🔍 getCurrentUser: Starting...")
     const clerkUser = await currentUser()
-    console.log("🔍 getCurrentUser: Clerk user:", clerkUser ? "Found" : "Not found")
     
     if (!clerkUser) {
-      console.log("🔍 getCurrentUser: No Clerk user")
       return null
     }
 
     const email = clerkUser.emailAddresses[0]?.emailAddress
-    console.log("🔍 getCurrentUser: Looking up user by email:", email)
     
     if (!email) {
-      console.log("🔍 getCurrentUser: No email found")
       return null
     }
 
@@ -58,7 +53,6 @@ export async function getCurrentUser() {
 
     // Create user if doesn't exist
     if (!user) {
-      console.log("🔍 getCurrentUser: Creating new user")
       user = await prisma.users.create({
         data: {
           id: crypto.randomUUID(),
@@ -75,7 +69,6 @@ export async function getCurrentUser() {
       })
     }
 
-    console.log("🔍 getCurrentUser: User found/created:", user ? "Yes" : "No")
     return user
   } catch (error) {
     console.error("❌ Error getting current user:", error)

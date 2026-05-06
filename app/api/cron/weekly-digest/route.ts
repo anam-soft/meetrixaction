@@ -151,7 +151,6 @@ export async function POST(request: NextRequest) {
         // Send email (integrate with your email service)
         // Example: await sendEmail(user.email, "Your team's week in review — MeetRix Action", emailHtml);
         
-        console.log(`Digest prepared for ${user.email}`);
         results.push({
           userId: user.id,
           email: user.email,

@@ -9,7 +9,6 @@ const prisma = new PrismaClient()
 
 async function upgradeUserToPro(userEmail: string) {
   try {
-    console.log('🔍 Finding user:', userEmail)
     
     const user = await prisma.users.findUnique({
       where: { email: userEmail }
@@ -20,7 +19,6 @@ async function upgradeUserToPro(userEmail: string) {
       process.exit(1)
     }
 
-    console.log('✅ Found user:', user.id, user.name)
 
     // Create or update subscription
     const subscription = await prisma.subscriptions.upsert({
@@ -49,13 +47,6 @@ async function upgradeUserToPro(userEmail: string) {
       },
     })
 
-    console.log('✅ User upgraded to Pro!')
-    console.log('📋 Subscription details:')
-    console.log('  - ID:', subscription.id)
-    console.log('  - Plan:', subscription.plan)
-    console.log('  - Status:', subscription.stripe_status)
-    console.log('  - Period ends:', subscription.current_period_end)
-    console.log('\n🎉 Done! Refresh your browser to see Pro plan.')
   } catch (error) {
     console.error('❌ Error:', error)
     process.exit(1)

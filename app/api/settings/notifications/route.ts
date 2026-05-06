@@ -32,7 +32,6 @@ export async function POST(req: NextRequest) {
 
     // In production, you would save these settings to a user_settings table
     // For now, just log and return success
-    console.log("Notification settings saved:", body)
 
     return NextResponse.json({
       success: true,

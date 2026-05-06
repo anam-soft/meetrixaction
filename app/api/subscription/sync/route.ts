@@ -16,11 +16,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { subscriptionId, customerId } = body
 
-    console.log("Manual sync requested for user:", user.id)
 
     // If subscription ID and customer ID provided, use them directly
     if (subscriptionId && customerId) {
-      console.log("Using provided subscription ID:", subscriptionId)
       
       const Stripe = require("stripe")
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {

@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
     // 3. Generate a unique invite token
     
     // For now, just return success
-    console.log(`Invite sent to ${email} with role ${role}`)
 
     return NextResponse.json({
       success: true,

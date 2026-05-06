@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
     const eventData: AnalyticsEvent = await request.json()
 
     // Log event (in production, send to analytics service)
-    console.log('📊 Analytics Event:', {
       ...eventData,
       userId: user?.id || eventData.userId,
     })

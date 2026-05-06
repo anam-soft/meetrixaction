@@ -248,7 +248,6 @@ export async function attachTasksToEvent(
     const event = await findCalendarEvent(calendar, eventTitle, date);
     
     if (!event) {
-      console.log(`No calendar event found for "${eventTitle}" on ${date.toDateString()}`);
       return {
         success: false,
         message: 'Calendar event not found',

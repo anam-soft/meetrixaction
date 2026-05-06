@@ -40,7 +40,6 @@ export function trackUpgradeEvent(
 
   // Log to console in development
   if (process.env.NODE_ENV === 'development') {
-    console.log('📊 Upgrade Event:', eventData)
   }
 
   // Send to analytics service (e.g., Google Analytics, Mixpanel, PostHog)
@@ -92,7 +91,6 @@ export async function trackConversionMetrics() {
     const metrics = await response.json()
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('📈 Conversion Metrics:', metrics)
     }
 
     return metrics
