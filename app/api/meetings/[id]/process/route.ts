@@ -57,7 +57,6 @@ export async function POST(
       meetingId,
     })
   } catch (error) {
-    console.error("Process meeting error:", error)
     return NextResponse.json(
       { error: "Failed to process meeting" },
       { status: 500 }
@@ -129,7 +128,6 @@ async function processMeeting(meetingId: string, userId: string) {
     await incrementAIProcessed(userId)
 
   } catch (error) {
-    console.error("Meeting processing failed:", error)
     
     // Update status to failed
     await prisma.meetings.update({

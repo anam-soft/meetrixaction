@@ -52,7 +52,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ tasks })
   } catch (error) {
-    console.error("Fetch tasks error:", error)
     return NextResponse.json(
       { error: "Failed to fetch tasks" },
       { status: 500 }
@@ -130,7 +129,6 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ task: updatedTask })
   } catch (error) {
-    console.error("Update task error:", error)
     return NextResponse.json(
       { error: "Failed to update task" },
       { status: 500 }

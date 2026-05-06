@@ -103,7 +103,6 @@ export default function MeetingsPage() {
       await fetch(`/api/meetings?id=${meetingId}`, { method: "DELETE" })
       fetchMeetings()
     } catch (error) {
-      console.error("Failed to delete meeting:", error)
     }
   }
 

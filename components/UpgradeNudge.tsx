@@ -38,7 +38,6 @@ export default function UpgradeNudge({
         window.location.href = data.url;
       }
     } catch (error) {
-      console.error("Failed to create checkout session:", error);
       setLoading(false);
     }
   };

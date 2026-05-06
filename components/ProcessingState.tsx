@@ -111,7 +111,6 @@ export default function ProcessingState({
           // Handle error state
         }
       } catch (error) {
-        console.error("Error polling meeting status:", error)
       }
     }, 2000)
 

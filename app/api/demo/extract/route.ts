@@ -62,7 +62,6 @@ Priority rules:
 
     return NextResponse.json(extractedData)
   } catch (error: any) {
-    console.error("Error extracting tasks:", error)
     
     // Return a more specific error message
     if (error.message?.includes("JSON")) {

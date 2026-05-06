@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    console.log("🧪 Creating mock Pro subscription for user:", user.id)
 
     // Create or update subscription
     const subscription = await prisma.subscriptions.upsert({
@@ -53,7 +52,6 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    console.log("✅ Mock Pro subscription created:", subscription.id)
 
     return NextResponse.json({
       success: true,
@@ -66,7 +64,6 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error("Error creating mock subscription:", error)
     return NextResponse.json(
       { error: "Failed to create mock subscription" },
       { status: 500 }
@@ -92,20 +89,17 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    console.log("🧪 Removing mock subscription for user:", user.id)
 
     await prisma.subscriptions.deleteMany({
       where: { user_id: user.id },
     })
 
-    console.log("✅ Mock subscription removed")
 
     return NextResponse.json({
       success: true,
       message: "Reverted to Free plan",
     })
   } catch (error) {
-    console.error("Error removing mock subscription:", error)
     return NextResponse.json(
       { error: "Failed to remove mock subscription" },
       { status: 500 }

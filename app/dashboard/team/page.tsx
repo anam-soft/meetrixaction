@@ -57,7 +57,6 @@ export default function TeamPage() {
       const invitesData = await invitesRes.json()
       setPendingInvites(invitesData.invites || [])
     } catch (error) {
-      console.error("Failed to fetch team data:", error)
     } finally {
       setLoading(false)
     }
@@ -85,7 +84,6 @@ export default function TeamPage() {
         alert(data.error || "Failed to send invite")
       }
     } catch (error) {
-      console.error("Failed to invite member:", error)
       alert("Failed to send invite")
     } finally {
       setInviting(false)
@@ -99,7 +97,6 @@ export default function TeamPage() {
       await fetch(`/api/team/members?id=${memberId}`, { method: "DELETE" })
       fetchTeamData()
     } catch (error) {
-      console.error("Failed to remove member:", error)
     }
   }
 
@@ -108,7 +105,6 @@ export default function TeamPage() {
       await fetch(`/api/team/invites?id=${inviteId}`, { method: "DELETE" })
       fetchTeamData()
     } catch (error) {
-      console.error("Failed to cancel invite:", error)
     }
   }
 

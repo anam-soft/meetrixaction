@@ -44,7 +44,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       const data = await res.json()
       setIsPro(data.isPro || false)
     } catch (error) {
-      console.error("Failed to fetch subscription status:", error)
     }
   }
 

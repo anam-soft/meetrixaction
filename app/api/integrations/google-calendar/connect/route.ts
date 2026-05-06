@@ -38,7 +38,6 @@ export async function GET(request: NextRequest) {
     // Redirect user to Google authorization page
     return NextResponse.redirect(authUrl);
   } catch (error) {
-    console.error('Error initiating Google Calendar OAuth:', error);
     
     return NextResponse.json(
       { 

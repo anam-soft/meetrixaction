@@ -110,7 +110,6 @@ export default function DashboardPage() {
       await fetch("/api/subscription/sync", { method: "POST" })
       await fetchUsage()
     } catch (error) {
-      console.error("Failed to sync subscription:", error)
     }
   }
 

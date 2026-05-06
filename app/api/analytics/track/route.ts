@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
     const eventData: AnalyticsEvent = await request.json()
 
     // Log event (in production, send to analytics service)
-    console.log('📊 Analytics Event:', {
       ...eventData,
       userId: user?.id || eventData.userId,
     })
@@ -30,7 +29,6 @@ export async function POST(request: NextRequest) {
     // For now, just acknowledge receipt
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Analytics tracking error:", error)
     // Don't fail the request if analytics fails
     return NextResponse.json({ success: false }, { status: 200 })
   }
@@ -82,7 +80,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(metrics)
   } catch (error) {
-    console.error("Metrics error:", error)
     return NextResponse.json(
       { error: "Failed to fetch metrics" },
       { status: 500 }

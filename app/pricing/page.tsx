@@ -33,7 +33,6 @@ export default function PricingPage() {
         setIsLoading(false)
       }
     } catch (error) {
-      console.error("Upgrade error:", error)
       alert("Something went wrong. Please try again.")
       setIsLoading(false)
     }

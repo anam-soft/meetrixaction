@@ -45,7 +45,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ members })
   } catch (error) {
-    console.error("Error fetching team members:", error)
     return NextResponse.json(
       { error: "Failed to fetch team members" },
       { status: 500 }
@@ -73,7 +72,6 @@ export async function DELETE(req: NextRequest) {
     // For now, just return success
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error removing team member:", error)
     return NextResponse.json(
       { error: "Failed to remove team member" },
       { status: 500 }

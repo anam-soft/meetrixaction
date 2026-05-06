@@ -56,7 +56,6 @@ export async function GET(request: NextRequest) {
       tokenExpiresAt: integration.token_expires_at,
     });
   } catch (error) {
-    console.error('Error checking Google Calendar connection:', error);
     
     return NextResponse.json(
       { 
@@ -116,7 +115,6 @@ export async function DELETE(request: NextRequest) {
       message: 'Google Calendar disconnected successfully',
     });
   } catch (error) {
-    console.error('Error disconnecting Google Calendar:', error);
     
     return NextResponse.json(
       { 

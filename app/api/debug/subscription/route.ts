@@ -93,7 +93,6 @@ export async function GET(request: NextRequest) {
           metadata: s.metadata,
         }))
     } catch (error) {
-      console.error("Error fetching checkout sessions:", error)
     }
 
     // Get recent payment intents
@@ -113,7 +112,6 @@ export async function GET(request: NextRequest) {
           created: new Date(p.created * 1000).toISOString(),
         }))
     } catch (error) {
-      console.error("Error fetching payment intents:", error)
     }
 
     const hasActiveSubscription = stripeSubscriptions.some(s => s.status === 'active')
@@ -178,7 +176,6 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error("Debug subscription error:", error)
     return NextResponse.json(
       { error: "Failed to debug subscription", details: error instanceof Error ? error.message : String(error) },
       { status: 500 }

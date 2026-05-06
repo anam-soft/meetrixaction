@@ -48,7 +48,6 @@ Write the insight:`;
 
     return response.choices[0].message.content?.trim() || "Your team is making steady progress this week.";
   } catch (error) {
-    console.error("Failed to generate AI insight:", error);
     return "Your team is making steady progress this week.";
   }
 }

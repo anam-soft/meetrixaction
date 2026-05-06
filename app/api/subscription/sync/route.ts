@@ -16,11 +16,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { subscriptionId, customerId } = body
 
-    console.log("Manual sync requested for user:", user.id)
 
     // If subscription ID and customer ID provided, use them directly
     if (subscriptionId && customerId) {
-      console.log("Using provided subscription ID:", subscriptionId)
       
       const Stripe = require("stripe")
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -78,7 +76,6 @@ export async function POST(request: NextRequest) {
           }
         })
       } catch (error) {
-        console.error("Error syncing with provided ID:", error)
         return NextResponse.json({
           success: false,
           message: "Failed to sync with provided subscription ID",
@@ -107,7 +104,6 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error("Subscription sync error:", error)
     return NextResponse.json(
       { 
         success: false,

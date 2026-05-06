@@ -140,7 +140,6 @@ export async function POST(request: NextRequest) {
       taskCount,
     })
   } catch (error) {
-    console.error("Upload error:", error)
     return NextResponse.json(
       { error: "Failed to upload meeting" },
       { status: 500 }
@@ -203,7 +202,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ meetings })
   } catch (error) {
-    console.error("Fetch meetings error:", error)
     return NextResponse.json(
       { error: "Failed to fetch meetings" },
       { status: 500 }
@@ -250,7 +248,6 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Delete meeting error:", error)
     return NextResponse.json(
       { error: "Failed to delete meeting" },
       { status: 500 }

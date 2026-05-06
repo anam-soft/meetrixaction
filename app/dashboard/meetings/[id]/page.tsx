@@ -69,7 +69,6 @@ export default function MeetingDetailPage() {
         router.push("/dashboard/meetings")
       }
     } catch (error) {
-      console.error("Failed to fetch meeting:", error)
       router.push("/dashboard/meetings")
     } finally {
       setLoading(false)

@@ -69,7 +69,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(progress);
   } catch (error) {
-    console.error("Onboarding progress error:", error);
     return NextResponse.json(
       { error: "Failed to fetch onboarding progress" },
       { status: 500 }

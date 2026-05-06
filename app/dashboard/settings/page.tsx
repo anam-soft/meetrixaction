@@ -124,7 +124,6 @@ export default function SettingsPage() {
       const data = await res.json()
       setSubscription(data.subscription)
     } catch (error) {
-      console.error("Failed to fetch subscription:", error)
     }
   }
 
@@ -146,7 +145,6 @@ export default function SettingsPage() {
         )
       )
     } catch (error) {
-      console.error("Failed to fetch Google Calendar status:", error)
     }
   }
 
@@ -165,7 +163,6 @@ export default function SettingsPage() {
       })
       showSavedMessage()
     } catch (error) {
-      console.error("Failed to update profile:", error)
     } finally {
       setLoading(false)
     }
@@ -181,7 +178,6 @@ export default function SettingsPage() {
       })
       showSavedMessage()
     } catch (error) {
-      console.error("Failed to save notifications:", error)
     } finally {
       setLoading(false)
     }
@@ -220,7 +216,6 @@ export default function SettingsPage() {
           throw new Error("Failed to disconnect")
         }
       } catch (error) {
-        console.error("Failed to disconnect Google Calendar:", error)
         showToast("Failed to disconnect Google Calendar", 'error')
       } finally {
         setIntegrationLoading(null)
@@ -242,7 +237,6 @@ export default function SettingsPage() {
         window.location.href = data.url
       }
     } catch (error) {
-      console.error("Failed to open billing portal:", error)
     }
   }
 
@@ -262,7 +256,6 @@ export default function SettingsPage() {
         window.location.href = data.url
       }
     } catch (error) {
-      console.error("Failed to start checkout:", error)
     }
   }
 

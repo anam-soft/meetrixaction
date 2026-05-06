@@ -48,7 +48,6 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error("Test subscription error:", error)
     return NextResponse.json(
       { error: "Failed to test subscription", details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
