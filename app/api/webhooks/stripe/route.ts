@@ -138,11 +138,6 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     session.subscription as string
   )
 
-    id: subscriptionData.id,
-    status: subscriptionData.status,
-    customer: subscriptionData.customer,
-  })
-
   // Extract the data from the subscription object with type assertion
   const currentPeriodStart = (subscriptionData as any).current_period_start
   const currentPeriodEnd = (subscriptionData as any).current_period_end
