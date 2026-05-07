@@ -53,7 +53,7 @@ export default function PricingPage() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Free Plan */}
           <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 hover:border-purple-500/30 transition-all">
             <div className="flex items-center gap-3 mb-6">
@@ -104,6 +104,68 @@ export default function PricingPage() {
             </button>
           </div>
 
+          {/* Starter Plan */}
+          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 hover:border-purple-500/30 transition-all">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 rounded-lg bg-purple-500/20">
+                <Zap className="w-6 h-6 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-white">Starter</h3>
+                <p className="text-gray-400">Perfect for growing teams</p>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <div className="flex items-baseline gap-2">
+                <span className="text-5xl font-bold text-white">$9</span>
+                <span className="text-gray-400">/month</span>
+              </div>
+            </div>
+
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-300 font-medium">20 meetings per month</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-300">Everything in Free, plus:</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-300">Up to 3 team members</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-300">Advanced analytics</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-300">Priority email support</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <span className="text-gray-300">Weekly digest emails</span>
+              </li>
+            </ul>
+
+            <button
+              onClick={handleUpgrade}
+              disabled={isLoading}
+              className="w-full py-3 px-6 rounded-lg font-semibold bg-white/10 text-white hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {isLoading ? (
+                "Redirecting..."
+              ) : (
+                <>
+                  Upgrade to Starter
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
+            </button>
+          </div>
+
           {/* Pro Plan */}
           <div className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-lg border-2 border-purple-500 rounded-2xl p-8 relative hover:shadow-2xl hover:shadow-purple-500/20 transition-all">
             {/* Popular Badge */}
@@ -137,7 +199,11 @@ export default function PricingPage() {
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
-                <span className="text-white">Everything in Free, plus:</span>
+                <span className="text-white">Everything in Starter, plus:</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <span className="text-white">Unlimited team members</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />

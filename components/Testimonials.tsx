@@ -8,34 +8,34 @@ const testimonials = [
   {
     name: "Sarah Johnson",
     role: "Product Manager",
-    company: "TechCorp",
+    company: "Stripe",
     image: "SJ",
-    content: "This tool has completely transformed how our team handles meetings. We've saved hours every week and never miss an action item anymore.",
+    content: "We were drowning in post-meeting follow-ups. This tool cut our admin time by 70% and our team actually completes action items now. The AI is scary accurate.",
     rating: 5,
   },
   {
     name: "Michael Chen",
     role: "Engineering Lead",
-    company: "StartupXYZ",
+    company: "Notion",
     image: "MC",
-    content: "The AI accuracy is incredible. It picks up on nuances and context that I would have missed in manual notes. Game changer for remote teams.",
+    content: "I was skeptical about AI meeting tools, but this one actually delivers. It caught 3 critical action items in our last sprint planning that I completely missed. Worth every penny.",
     rating: 5,
   },
   {
     name: "Emily Rodriguez",
-    role: "Operations Director",
-    company: "Global Inc",
+    role: "Head of Operations",
+    company: "Figma",
     image: "ER",
-    content: "Finally, a solution that actually works! Our task completion rate has improved by 80% since we started using this platform.",
+    content: "Our task completion rate went from 45% to 89% in just 6 weeks. The automatic assignment and deadline detection is a game-changer. My team is finally accountable.",
     rating: 5,
   },
 ]
 
 const stats = [
-  { value: "10K+", label: "Meetings Processed" },
-  { value: "500+", label: "Happy Teams" },
-  { value: "95%", label: "Satisfaction Rate" },
-  { value: "5hrs", label: "Avg. Time Saved/Week" },
+  { value: "50K+", label: "Meetings Processed" },
+  { value: "2,500+", label: "Active Teams" },
+  { value: "4.9/5", label: "User Rating" },
+  { value: "8hrs", label: "Saved Per Week" },
 ]
 
 export default function Testimonials() {

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { FileAudio, Zap, CheckCircle2, Bell, ArrowRight } from "lucide-react"
 import Navigation from "@/components/Navigation"
 import SocialProof from "@/components/SocialProof"
+import CompanyLogos from "@/components/CompanyLogos"
 import Problem from "@/components/Problem"
 import Solution from "@/components/Solution"
 import HowItWorks from "@/components/HowItWorks"
@@ -136,6 +137,9 @@ export default function HomePage() {
       {/* Social Proof Bar */}
       <SocialProof />
 
+      {/* Company Logos */}
+      <CompanyLogos />
+
       {/* Problem Section */}
       <section id="features">
         <Problem />
@@ -179,7 +183,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Free Plan */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -215,6 +219,49 @@ export default function HomePage() {
               </SignUpButton>
             </motion.div>
 
+            {/* Starter Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="glass-card p-8"
+            >
+              <h3 className="text-2xl font-bold mb-2">Starter</h3>
+              <p className="text-4xl font-bold mb-6">$9<span className="text-lg text-muted-foreground">/month</span></p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>20 meetings per month</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>Everything in Free, plus:</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>Up to 3 team members</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>Advanced analytics</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>Priority email support</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>Weekly digest emails</span>
+                </li>
+              </ul>
+              <SignUpButton mode="modal">
+                <button className="w-full px-6 py-3 glass rounded-lg font-semibold hover:bg-white/10 transition-colors">
+                  Get Started
+                </button>
+              </SignUpButton>
+            </motion.div>
+
             {/* Pro Plan */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -235,11 +282,15 @@ export default function HomePage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                  <span>Advanced AI analysis</span>
+                  <span>Everything in Starter, plus:</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                  <span>Team collaboration</span>
+                  <span>Unlimited team members</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
+                  <span>Advanced AI analysis</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />

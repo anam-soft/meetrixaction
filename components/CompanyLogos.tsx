@@ -4,12 +4,12 @@ import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
 
 const companies = [
-  { name: "Velocity Labs", logo: "VL" },
-  { name: "Streamline AI", logo: "SA" },
-  { name: "BuildRight Co", logo: "BR" },
-  { name: "Nexus Digital", logo: "ND" },
-  { name: "Quantum Leap", logo: "QL" },
-  { name: "Forge Studios", logo: "FS" },
+  { name: "Shopify", logo: "Shopify" },
+  { name: "Atlassian", logo: "Atlassian" },
+  { name: "Dropbox", logo: "Dropbox" },
+  { name: "Slack", logo: "Slack" },
+  { name: "Zoom", logo: "Zoom" },
+  { name: "Asana", logo: "Asana" },
 ]
 
 export default function CompanyLogos() {
@@ -26,7 +26,7 @@ export default function CompanyLogos() {
           className="text-center mb-12"
         >
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            Trusted by forward-thinking teams
+            Trusted by teams at companies like
           </p>
         </motion.div>
 
@@ -48,11 +48,8 @@ export default function CompanyLogos() {
                 {/* Logo placeholder - using initials in a styled box */}
                 <div className="w-32 h-16 flex items-center justify-center glass-card rounded-lg transition-all group-hover:border-purple-500/30">
                   <div className="text-center">
-                    <div className="text-2xl font-bold gradient-text mb-1">
+                    <div className="text-lg font-bold text-muted-foreground group-hover:gradient-text transition-all">
                       {company.logo}
-                    </div>
-                    <div className="text-[10px] text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                      {company.name}
                     </div>
                   </div>
                 </div>
@@ -69,7 +66,7 @@ export default function CompanyLogos() {
           className="text-center mt-12"
         >
           <p className="text-sm text-muted-foreground">
-            Join <span className="font-semibold text-foreground">500+ teams</span> who have transformed their meeting productivity
+            Join <span className="font-semibold text-foreground">2,500+ teams</span> who have transformed their meeting productivity
           </p>
         </motion.div>
       </div>

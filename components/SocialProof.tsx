@@ -77,7 +77,7 @@ export default function SocialProof() {
             </div>
             <p className="text-lg font-medium text-foreground">
               Trusted by{" "}
-              <span className="gradient-text font-bold">500+ teams</span>
+              <span className="gradient-text font-bold">2,500+ teams</span>
             </p>
           </motion.div>
         </motion.div>
