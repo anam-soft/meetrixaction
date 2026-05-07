@@ -7,6 +7,7 @@ import DashboardLayout from "@/components/DashboardLayout"
 import UpgradeSuccessToast from "@/components/UpgradeSuccessToast"
 import UploadModal from "@/components/UploadModal"
 import UpgradeNudge from "@/components/UpgradeNudge"
+import DeleteConfirmModal from "@/components/DeleteConfirmModal"
 import { useUpgradeNudge } from "@/lib/useUpgradeNudge"
 import {
   FileAudio,
@@ -52,6 +53,9 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [showSuccessToast, setShowSuccessToast] = useState(false)
   const [showUploadModal, setShowUploadModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [meetingToDelete, setMeetingToDelete] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   
   const upgradeNudge = useUpgradeNudge()
 
@@ -114,12 +118,26 @@ export default function DashboardPage() {
     }
   }
 
-  const deleteMeeting = async (meetingId: string) => {
-    if (!confirm("Are you sure you want to delete this meeting?")) return
+  const handleDeleteClick = (meetingId: string) => {
+    setMeetingToDelete(meetingId)
+    setShowDeleteModal(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!meetingToDelete) return
     
-    await fetch(`/api/meetings?id=${meetingId}`, { method: "DELETE" })
-    fetchMeetings()
-    fetchTasks()
+    setIsDeleting(true)
+    try {
+      await fetch(`/api/meetings?id=${meetingToDelete}`, { method: "DELETE" })
+      fetchMeetings()
+      fetchTasks()
+      setShowDeleteModal(false)
+      setMeetingToDelete(null)
+    } catch (error) {
+      console.error("Failed to delete meeting:", error)
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
   const handleUploadComplete = (meetingId: string) => {
@@ -342,7 +360,7 @@ export default function DashboardPage() {
                               <Eye className="w-4 h-4" />
                             </Link>
                             <button
-                              onClick={() => deleteMeeting(meeting.id)}
+                              onClick={() => handleDeleteClick(meeting.id)}
                               className="p-2 hover:bg-red-500/20 rounded-lg transition-colors text-red-400"
                               title="Delete"
                             >
@@ -413,6 +431,20 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => {
+          setShowDeleteModal(false)
+          setMeetingToDelete(null)
+        }}
+        onConfirm={confirmDelete}
+        title="Delete Meeting?"
+        message="Are you sure you want to delete this meeting? This will also delete all associated tasks. This action cannot be undone."
+        confirmText="Delete Meeting"
+        isDeleting={isDeleting}
+      />
     </DashboardLayout>
   )
 }
